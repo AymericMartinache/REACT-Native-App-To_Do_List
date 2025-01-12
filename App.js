@@ -38,17 +38,23 @@ export default function App() {
     ]);
 
     const [activeTab, setActiveTab] = useState('all');
-    // Rendu des tâches et du nombre de tâches
+
+    // Rendu des tâches
     function renderTodoList() {
-        const sortedFilteredTodoList = filteredTodoList
+        const sortedFilteredTodoList = todoList
+            .filter((task) => {
+                if (activeTab === 'all') return true;
+                if (activeTab === 'inProgress') return !task.isCompleted;
+                if (activeTab === 'done') return task.isCompleted;
+            })
             .sort((a, b) => a.title.localeCompare(b.title))
             .map((task) => (
                 <View key={task.id}>
-                    <Card updateTask={updateTask} task={task}></Card>
+                    <Card updateTask={updateTask} task={task} />
                 </View>
             ));
 
-        return sortedFilteredTodoList; // Retourne le tableau trié et filtré
+        return sortedFilteredTodoList;
     }
 
     // Update d'une tâche
@@ -74,23 +80,16 @@ export default function App() {
         setTodoList(updatedTodoList);
     }
 
-    // Filtres des taches
-    const filteredTodoList = todoList.filter((task) => {
-        if (activeTab === 'all') return true;
-        if (activeTab === 'inProgress') {
-            return !task.isCompleted;
-        }
-        if (activeTab === 'done') {
-            return task.isCompleted;
-        }
-    });
-
     // Calcul du nombre de tâches pour chaque filtre
-    const tasksSumAll = todoList.length;
-    const tasksSumInProgress = todoList.filter(
-        (task) => !task.isCompleted
-    ).length;
-    const tasksSumDone = todoList.filter((task) => task.isCompleted).length;
+    const taskCounts = todoList.reduce(
+        (acc, task) => {
+            acc.all += 1;
+            if (task.isCompleted) acc.done += 1;
+            else acc.inProgress += 1;
+            return acc;
+        },
+        { all: 0, inProgress: 0, done: 0 }
+    );
 
     return (
         <>
@@ -115,11 +114,7 @@ export default function App() {
             <View style={styles.footer}>
                 <TabBottomMenu
                     activeTab={activeTab}
-                    tasksSum={{
-                        all: tasksSumAll,
-                        inProgress: tasksSumInProgress,
-                        done: tasksSumDone,
-                    }}
+                    taskCounts={taskCounts}
                     onPress={setActiveTab}
                 ></TabBottomMenu>
             </View>
