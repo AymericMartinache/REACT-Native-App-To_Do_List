@@ -3,7 +3,6 @@ import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
     app: {
-        // fontFamily: 'JosefinSans',
         flex: 1,
         padding: 10,
         backgroundColor: '#F9F9F9',

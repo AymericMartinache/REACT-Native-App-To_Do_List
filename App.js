@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 
 // REACT NATIVE
-import { Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 
 // SAFE AREA CONTEXT
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
@@ -16,9 +16,6 @@ import Card from './Components/Card/Card';
 import Footer from './Components/Footer/Footer';
 import AddButton from './Components/AddButton/AddButton';
 
-// EXPO FONT
-import { useFonts } from 'expo-font';
-
 // EXPO SPLASH SCREEN
 import * as SplashScreen from 'expo-splash-screen';
 
@@ -26,26 +23,32 @@ import * as SplashScreen from 'expo-splash-screen';
 SplashScreen.preventAutoHideAsync();
 setTimeout(SplashScreen.hideAsync, 3000);
 
-// DATA
-const TODO_LIST = [
-    { id: 1, title: 'Sortir le chat', isCompleted: true },
-    { id: 2, title: 'Aller au sport', isCompleted: false },
-    { id: 3, title: 'Faire les courses', isCompleted: true },
-    { id: 4, title: 'Appeler copain', isCompleted: false },
-    { id: 5, title: 'Préparer le dîner', isCompleted: false },
-    { id: 6, title: 'Lire un chapitre de livre', isCompleted: true },
-    { id: 7, title: 'Envoyer un email important', isCompleted: false },
-    { id: 8, title: 'Nettoyer la maison', isCompleted: false },
-    { id: 9, title: 'Planifier le week-end', isCompleted: true },
-];
-
 export default function App() {
     // STATES
+    const [todoList, setTodoList] = useState([
+        { id: 1, title: 'Sortir le chat', isCompleted: true },
+        { id: 2, title: 'Aller au sport', isCompleted: true },
+        { id: 3, title: 'Faire les courses', isCompleted: true },
+        { id: 4, title: 'Appeler copain', isCompleted: false },
+        { id: 5, title: 'Préparer le dîner', isCompleted: false },
+        { id: 6, title: 'Lire un chapitre de livre', isCompleted: true },
+        { id: 7, title: 'Envoyer un email important', isCompleted: false },
+        { id: 8, title: 'Nettoyer la maison', isCompleted: true },
+        { id: 9, title: 'Planifier le week-end', isCompleted: false },
+    ]);
 
-    // Charger les polices
-    const [fontsLoaded] = useFonts({
-        Playwrite: require('./assets/fonts/Playwrite_AU_SA/PlaywriteAUSA-VariableFont_wght.ttf'),
-    });
+    // Rendu des tâches
+    function renderTodoList() {
+        return todoList
+            .sort((a, b) => {
+                if (a.isCompleted === b.isCompleted) {
+                    return a.title.localeCompare(b.title);
+                } else {
+                    return a.isCompleted - b.isCompleted;
+                }
+            })
+            .map((task) => <Card key={task.id} task={task}></Card>);
+    }
 
     return (
         <>
@@ -55,15 +58,7 @@ export default function App() {
                         <Header></Header>
                     </View>
                     <View style={styles.body}>
-                        {TODO_LIST.sort((a, b) => {
-                            if (a.isCompleted === b.isCompleted) {
-                                return a.title.localeCompare(b.title);
-                            } else {
-                                return a.isCompleted - b.isCompleted;
-                            }
-                        }).map((task) => (
-                            <Card key={task.id} task={task}></Card>
-                        ))}
+                        <ScrollView> {renderTodoList()}</ScrollView>
                     </View>
                     {/* <AddButton></AddButton> */}
                 </SafeAreaView>
