@@ -40,6 +40,14 @@ export default function App() {
     const [activeTab, setActiveTab] = useState('all');
 
     //* CREATE
+    function addTask(inputValue) {
+        const newTask = {
+            id: new Date().getTime(),
+            title: inputValue,
+            isCompleted: false,
+        };
+        todoList.push(newTask);
+    }
 
     //* READ
     // Rendu des tâches
@@ -63,6 +71,17 @@ export default function App() {
 
         return sortedFilteredTodoList;
     }
+
+    // Calcul du nombre de tâches pour chaque filtre
+    const taskCounts = todoList.reduce(
+        (acc, task) => {
+            acc.all += 1;
+            if (task.isCompleted) acc.done += 1;
+            else acc.inProgress += 1;
+            return acc;
+        },
+        { all: 0, inProgress: 0, done: 0 }
+    );
 
     //* UPDATE
     // Update d'une tâche
@@ -96,7 +115,6 @@ export default function App() {
         // On met à jour le state des taches avec le tableau à jour
         setTodoList(updatedTodoList);
     }
-
     // Fonction pour confirmer la suppression
     const confirmDeleteTask = (task) => {
         Alert.alert(
@@ -113,20 +131,9 @@ export default function App() {
                     style: 'destructive',
                 },
             ],
-            { cancelable: true }
+            { cancelable: false }
         );
     };
-
-    // Calcul du nombre de tâches pour chaque filtre
-    const taskCounts = todoList.reduce(
-        (acc, task) => {
-            acc.all += 1;
-            if (task.isCompleted) acc.done += 1;
-            else acc.inProgress += 1;
-            return acc;
-        },
-        { all: 0, inProgress: 0, done: 0 }
-    );
 
     return (
         <>
