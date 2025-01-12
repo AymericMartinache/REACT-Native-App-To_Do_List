@@ -4,7 +4,7 @@
         "slug": "to-do-list",
         "version": "1.0.0",
         "orientation": "portrait",
-        "icon": "./assets/splash-icon.png",
+        "icon": "./assets/splash.png",
 
         "newArchEnabled": true,
         "splash": {
@@ -22,20 +22,6 @@
         },
         "web": {
             "favicon": "./assets/favicon.png"
-        },
-        "plugins": [
-            [
-                "expo-splash-screen",
-                {
-                    "backgroundColor": "#111",
-                    "image": "./assets/splash-icon.png",
-                    "dark": {
-                        "image": "./assets/splash-icon-dark.png",
-                        "backgroundColor": "#000000"
-                    },
-                    "imageWidth": 200
-                }
-            ]
-        ]
+        }
     }
 }

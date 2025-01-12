@@ -7,8 +7,9 @@ export const styles = StyleSheet.create({
         resizeMode: 'contain',
     },
     subTitle: {
-        fontSize: 15,
+        fontSize: 20,
         fontFamily: 'Playwrite',
-        color: '#ABABAB',
+        color: '#3561b2',
+        marginTop: -15,
     },
 });
