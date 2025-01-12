@@ -38,14 +38,17 @@ export default function App() {
     ]);
 
     const [activeTab, setActiveTab] = useState('all');
-
-    // Rendu des tâches
+    // Rendu des tâches et du nombre de tâches
     function renderTodoList() {
-        return filteredTodoList.map((task) => (
-            <View key={task.id}>
-                <Card updateTask={updateTask} task={task}></Card>
-            </View>
-        ));
+        const sortedFilteredTodoList = filteredTodoList
+            .sort((a, b) => a.title.localeCompare(b.title))
+            .map((task) => (
+                <View key={task.id}>
+                    <Card updateTask={updateTask} task={task}></Card>
+                </View>
+            ));
+
+        return sortedFilteredTodoList; // Retourne le tableau trié et filtré
     }
 
     // Update d'une tâche
@@ -82,6 +85,13 @@ export default function App() {
         }
     });
 
+    // Calcul du nombre de tâches pour chaque filtre
+    const tasksSumAll = todoList.length;
+    const tasksSumInProgress = todoList.filter(
+        (task) => !task.isCompleted
+    ).length;
+    const tasksSumDone = todoList.filter((task) => task.isCompleted).length;
+
     return (
         <>
             <SafeAreaProvider>
@@ -105,6 +115,11 @@ export default function App() {
             <View style={styles.footer}>
                 <TabBottomMenu
                     activeTab={activeTab}
+                    tasksSum={{
+                        all: tasksSumAll,
+                        inProgress: tasksSumInProgress,
+                        done: tasksSumDone,
+                    }}
                     onPress={setActiveTab}
                 ></TabBottomMenu>
             </View>

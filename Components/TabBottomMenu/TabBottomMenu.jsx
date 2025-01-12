@@ -7,7 +7,7 @@ import { Text, TouchableOpacity, View } from 'react-native';
 // STYLES
 import { styles } from './TabBottomMenu.style';
 
-export default function TabBottomMenu({ activeTab, onPress }) {
+export default function TabBottomMenu({ activeTab, onPress, tasksSum }) {
     return (
         <View style={styles.container}>
             {/* Bouton "All" */}
@@ -21,7 +21,7 @@ export default function TabBottomMenu({ activeTab, onPress }) {
                         activeTab === 'all' && styles.activeItem,
                     ]}
                 >
-                    All (1000)
+                    All ({tasksSum.all})
                 </Text>
             </TouchableOpacity>
 
@@ -39,7 +39,7 @@ export default function TabBottomMenu({ activeTab, onPress }) {
                         activeTab === 'inProgress' && styles.activeItem,
                     ]}
                 >
-                    In Progress (10)
+                    In Progress ({tasksSum.inProgress})
                 </Text>
             </TouchableOpacity>
 
@@ -54,7 +54,7 @@ export default function TabBottomMenu({ activeTab, onPress }) {
                         activeTab === 'done' && styles.activeItem,
                     ]}
                 >
-                    Done (100)
+                    Done ({tasksSum.done})
                 </Text>
             </TouchableOpacity>
         </View>
