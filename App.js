@@ -13,11 +13,11 @@ import { styles } from './App.style';
 // COMPONENTS
 import Header from './Components/Header/Header';
 import Card from './Components/Card/Card';
-import Footer from './Components/Footer/Footer';
 import AddButton from './Components/AddButton/AddButton';
 
 // EXPO SPLASH SCREEN
 import * as SplashScreen from 'expo-splash-screen';
+import TabBottomMenu from './Components/TabBottomMenu/TabBottomMenu';
 
 // Empêcher le Splash Screen de disparaître automatiquement
 SplashScreen.preventAutoHideAsync();
@@ -36,6 +36,8 @@ export default function App() {
         { id: 8, title: 'Nettoyer la maison', isCompleted: true },
         { id: 9, title: 'Planifier le week-end', isCompleted: false },
     ]);
+
+    const [activeTab, setActiveTab] = useState('all');
 
     // Rendu des tâches
     function renderTodoList() {
@@ -90,7 +92,10 @@ export default function App() {
 
             {/* Footer */}
             <View style={styles.footer}>
-                <Footer></Footer>
+                <TabBottomMenu
+                    activeTab={activeTab}
+                    onPress={setActiveTab}
+                ></TabBottomMenu>
             </View>
         </>
     );

@@ -15,11 +15,13 @@ const styles = StyleSheet.create({
             width: 2,
             height: 4,
         },
-        shadowOpacity: 0.4,
+        shadowOpacity: 0.2,
         shadowRadius: 3.84,
 
         elevation: 4,
         marginVertical: 10,
+        borderWidth: 1,
+        borderColor: '#abb2b9',
     },
 
     image: {

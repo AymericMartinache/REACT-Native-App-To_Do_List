@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     subTitle: {
         fontSize: 20,
         fontFamily: 'Playwrite',
-        color: '#3561b2',
+        color: '#2E76E5',
         marginTop: -15,
     },
 });

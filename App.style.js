@@ -17,9 +17,9 @@ const styles = StyleSheet.create({
     body: {
         flex: 5,
     },
+
     footer: {
-        backgroundColor: 'lightblue',
-        height: 70,
+        height: 60,
     },
 });
 
