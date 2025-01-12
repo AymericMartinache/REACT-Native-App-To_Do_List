@@ -75,12 +75,11 @@ export default function App() {
     // Calcul du nombre de tâches pour chaque filtre
     const taskCounts = todoList.reduce(
         (acc, task) => {
-            acc.all += 1;
             if (task.isCompleted) acc.done += 1;
             else acc.inProgress += 1;
             return acc;
         },
-        { all: 0, inProgress: 0, done: 0 }
+        { all: todoList.length, inProgress: 0, done: 0 }
     );
 
     //* UPDATE
@@ -108,18 +107,16 @@ export default function App() {
     }
 
     //* DELETE
-    function deleteTask(task) {
-        // On filtre les tâches pour ne pas inclure celle que l'on veut supprimer
-        const updatedTodoList = todoList.filter((t) => t.id !== task.id);
 
-        // On met à jour le state des taches avec le tableau à jour
-        setTodoList(updatedTodoList);
-    }
     // Fonction pour confirmer la suppression
     const confirmDeleteTask = (task) => {
+        function deleteTask(task) {
+            // On met à jour le state des taches avec le tableau à jour
+            setTodoList(todoList.filter((t) => t.id !== task.id));
+        }
         Alert.alert(
             '⚠️ Suppression ⚠️',
-            `Êtes-vous sûr de vouloir supprimer la tâche "${task.title}" ?`,
+            `Êtes-vous sûr de vouloir supprimer "${task.title}" ?`,
             [
                 {
                     text: 'Annuler',
@@ -127,8 +124,8 @@ export default function App() {
                 },
                 {
                     text: 'Supprimer',
-                    onPress: () => deleteTask(task),
                     style: 'destructive',
+                    onPress: () => deleteTask(task),
                 },
             ],
             { cancelable: false }
