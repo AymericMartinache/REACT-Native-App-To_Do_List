@@ -19,13 +19,6 @@ import AddButton from './Components/AddButton/AddButton';
 // EXPO FONT
 import { useFonts } from 'expo-font';
 
-// EXPO SPLASH SCREEN
-import * as SplashScreen from 'expo-splash-screen';
-
-// Empêcher le Splash Screen de disparaître automatiquement
-SplashScreen.preventAutoHideAsync();
-setTimeout(SplashScreen.hideAsync, 2000);
-
 export default function App() {
     // STATES
 
