@@ -39,30 +39,56 @@ export default function App() {
 
     // Rendu des tâches
     function renderTodoList() {
-        return todoList
-            .sort((a, b) => {
-                if (a.isCompleted === b.isCompleted) {
-                    return a.title.localeCompare(b.title);
-                } else {
-                    return a.isCompleted - b.isCompleted;
-                }
-            })
-            .map((task) => <Card key={task.id} task={task}></Card>);
+        return todoList.map((task) => (
+            <View key={task.id}>
+                <Card updateTask={updateTask} task={task}></Card>
+            </View>
+        ));
+    }
+
+    // Update d'une tâche
+    function updateTask(task) {
+        // On met à jour la tâche en moodifiant isCompleted
+        const updatedTask = {
+            ...task,
+            isCompleted: !task.isCompleted,
+        };
+
+        // On récupère l'index de la tâche dans le tableau des tâches
+        const indexToUpdate = todoList.findIndex(
+            (task) => task.id === updatedTask.id
+        );
+
+        // On Créé un tableau des tâches mises à jour en récupérant le tableau d'origine
+        const updatedTodoList = [...todoList];
+
+        // On met à jour la tâche avec l'index
+        updatedTodoList[indexToUpdate] = updatedTask;
+
+        // On met à jour le state des taches avec le tableau à jour
+        setTodoList(updatedTodoList);
     }
 
     return (
         <>
             <SafeAreaProvider>
                 <SafeAreaView style={styles.app}>
+                    {/* Header */}
                     <View style={styles.header}>
                         <Header></Header>
                     </View>
+
+                    {/* Tasks */}
                     <View style={styles.body}>
-                        <ScrollView> {renderTodoList()}</ScrollView>
+                        <ScrollView>{renderTodoList()}</ScrollView>
                     </View>
+
+                    {/* Add task */}
                     {/* <AddButton></AddButton> */}
                 </SafeAreaView>
             </SafeAreaProvider>
+
+            {/* Footer */}
             <View style={styles.footer}>
                 <Footer></Footer>
             </View>
