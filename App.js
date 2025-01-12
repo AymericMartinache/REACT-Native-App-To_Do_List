@@ -1,8 +1,8 @@
 // REACT
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 // REACT NATIVE
-import { ScrollView, Text, View } from 'react-native';
+import { ScrollView, View, Alert } from 'react-native';
 
 // SAFE AREA CONTEXT
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
@@ -39,6 +39,9 @@ export default function App() {
 
     const [activeTab, setActiveTab] = useState('all');
 
+    //* CREATE
+
+    //* READ
     // Rendu des tâches
     function renderTodoList() {
         const sortedFilteredTodoList = todoList
@@ -50,13 +53,18 @@ export default function App() {
             .sort((a, b) => a.title.localeCompare(b.title))
             .map((task) => (
                 <View key={task.id}>
-                    <Card updateTask={updateTask} task={task} />
+                    <Card
+                        updateTask={updateTask}
+                        deleteTask={confirmDeleteTask}
+                        task={task}
+                    />
                 </View>
             ));
 
         return sortedFilteredTodoList;
     }
 
+    //* UPDATE
     // Update d'une tâche
     function updateTask(task) {
         // On met à jour la tâche en moodifiant isCompleted
@@ -80,6 +88,35 @@ export default function App() {
         setTodoList(updatedTodoList);
     }
 
+    //* DELETE
+    function deleteTask(task) {
+        // On filtre les tâches pour ne pas inclure celle que l'on veut supprimer
+        const updatedTodoList = todoList.filter((t) => t.id !== task.id);
+
+        // On met à jour le state des taches avec le tableau à jour
+        setTodoList(updatedTodoList);
+    }
+
+    // Fonction pour confirmer la suppression
+    const confirmDeleteTask = (task) => {
+        Alert.alert(
+            '⚠️ Suppression ⚠️',
+            `Êtes-vous sûr de vouloir supprimer la tâche "${task.title}" ?`,
+            [
+                {
+                    text: 'Annuler',
+                    style: 'cancel',
+                },
+                {
+                    text: 'Supprimer',
+                    onPress: () => deleteTask(task),
+                    style: 'destructive',
+                },
+            ],
+            { cancelable: true }
+        );
+    };
+
     // Calcul du nombre de tâches pour chaque filtre
     const taskCounts = todoList.reduce(
         (acc, task) => {
@@ -97,10 +134,10 @@ export default function App() {
                 <SafeAreaView style={styles.app}>
                     {/* Header */}
                     <View style={styles.header}>
-                        <Header></Header>
+                        <Header />
                     </View>
 
-                    {/* Tasks */}
+                    {/* Tasks list */}
                     <View style={styles.body}>
                         <ScrollView>{renderTodoList()}</ScrollView>
                     </View>
@@ -116,7 +153,7 @@ export default function App() {
                     activeTab={activeTab}
                     taskCounts={taskCounts}
                     onPress={setActiveTab}
-                ></TabBottomMenu>
+                />
             </View>
         </>
     );
