@@ -41,7 +41,7 @@ export default function App() {
 
     // Rendu des tâches
     function renderTodoList() {
-        return todoList.map((task) => (
+        return filteredTodoList.map((task) => (
             <View key={task.id}>
                 <Card updateTask={updateTask} task={task}></Card>
             </View>
@@ -70,6 +70,17 @@ export default function App() {
         // On met à jour le state des taches avec le tableau à jour
         setTodoList(updatedTodoList);
     }
+
+    // Filtres des taches
+    const filteredTodoList = todoList.filter((task) => {
+        if (activeTab === 'all') return true;
+        if (activeTab === 'inProgress') {
+            return !task.isCompleted;
+        }
+        if (activeTab === 'done') {
+            return task.isCompleted;
+        }
+    });
 
     return (
         <>
