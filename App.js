@@ -1,10 +1,13 @@
 // REACT
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // REACT NATIVE
 import { ScrollView, View, Alert } from 'react-native';
 import Dialog from 'react-native-dialog';
 import uuid from 'react-native-uuid';
+
+// STORAGE
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // EXPO FONT
 import { useFonts } from 'expo-font';
@@ -69,10 +72,32 @@ export default function App() {
 
     const [inputAddTask, setInputAddTask] = useState('');
 
+    const [isFirstRender, setIsFirstRender] = useState(true);
+
+    const [isLoadUpdate, setIsLoadUpdate] = useState(false);
+
+    // USE EFFECT
+    useEffect(() => {
+        loadTodoList();
+        // setIsFirstRender(false);
+    }, []);
+
+    useEffect(() => {
+        if (isLoadUpdate) {
+            setIsLoadUpdate(false);
+        } else {
+            if (!isFirstRender) {
+                console.log('SAVE TO DO');
+                saveToDoList();
+            } else {
+                setIsFirstRender(false);
+            }
+        }
+    }, [todoList]);
+
     // //* CREATE
     // Ajout d'une tâche
     function addTask(inputAddTask) {
-        console.log(inputAddTask);
         const newTask = {
             id: uuid.v4(),
             title: inputAddTask,
@@ -80,8 +105,8 @@ export default function App() {
         };
 
         setTodoList([...todoList, newTask]);
-
         hideAddDialog();
+        console.log('New task added, updated todoList:', todoList);
     }
     // Boite de dialog
     function showAddDialog() {
@@ -113,7 +138,6 @@ export default function App() {
 
         return sortedFilteredTodoList;
     }
-
     // Calcul du nombre de tâches pour chaque filtre
     const taskCounts = todoList.reduce(
         (acc, task) => {
@@ -172,6 +196,34 @@ export default function App() {
             { cancelable: false }
         );
     };
+
+    //* STORAGE
+    // Sauvegarde
+    async function saveToDoList() {
+        console.log('SAVE TO DO');
+
+        try {
+            await AsyncStorage.setItem('@todoList', JSON.stringify(todoList));
+        } catch (error) {
+            alert(`Erreur : ${error}`);
+        }
+    }
+    // Lecture
+    async function loadTodoList() {
+        console.log('LOAD TO DO');
+
+        try {
+            const stringyfyTodoList = await AsyncStorage.getItem('@todoList');
+            if (stringyfyTodoList !== null) {
+                const parsedTodoList = JSON.parse(stringyfyTodoList);
+                setIsLoadUpdate(true);
+                setTodoList(parsedTodoList);
+                setIsFirstRender(false);
+            }
+        } catch (error) {
+            alert(`Erreur : ${error}`);
+        }
+    }
 
     return (
         <>
