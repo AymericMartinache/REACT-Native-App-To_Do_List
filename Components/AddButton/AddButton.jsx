@@ -1,11 +1,13 @@
+// REACT NATIVE
+import { Text, TouchableOpacity } from 'react-native';
+
 // STYLES
-import { Text } from 'react-native';
 import { styles } from './AddButton.style';
 
-export default function AddButton() {
+export default function AddButton({ onPress }) {
     return (
-        <>
-            <Text>AddButton</Text>
-        </>
+        <TouchableOpacity style={styles.btn} onPress={onPress}>
+            <Text style={styles.text}>+ Nouvelle tâche</Text>
+        </TouchableOpacity>
     );
 }

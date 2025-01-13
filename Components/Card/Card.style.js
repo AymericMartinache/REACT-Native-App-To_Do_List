@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 20,
-        fontFamily: 'Playwrite',
+        fontFamily: 'Playwrite-Regular',
         color: '#111',
         completed: {
             textDecorationLine: 'line-through',

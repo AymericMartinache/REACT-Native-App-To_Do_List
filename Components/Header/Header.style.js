@@ -8,7 +8,8 @@ export const styles = StyleSheet.create({
     },
     subTitle: {
         fontSize: 20,
-        fontFamily: 'Playwrite',
+        fontFamily: 'Playwrite-Regular',
+
         color: '#2E76E5',
         marginTop: -15,
     },

@@ -3,6 +3,11 @@ import React, { useState } from 'react';
 
 // REACT NATIVE
 import { ScrollView, View, Alert } from 'react-native';
+import Dialog from 'react-native-dialog';
+import uuid from 'react-native-uuid';
+
+// EXPO FONT
+import { useFonts } from 'expo-font';
 
 // SAFE AREA CONTEXT
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
@@ -14,39 +19,76 @@ import { styles } from './App.style';
 import Header from './Components/Header/Header';
 import Card from './Components/Card/Card';
 import AddButton from './Components/AddButton/AddButton';
+import TabBottomMenu from './Components/TabBottomMenu/TabBottomMenu';
 
 // EXPO SPLASH SCREEN
 import * as SplashScreen from 'expo-splash-screen';
-import TabBottomMenu from './Components/TabBottomMenu/TabBottomMenu';
 
 // Empêcher le Splash Screen de disparaître automatiquement
 SplashScreen.preventAutoHideAsync();
 setTimeout(SplashScreen.hideAsync, 3000);
 
 export default function App() {
+    // FONTS
+    const [fontsLoaded] = useFonts({
+        'Playwrite-ExtraLight': require('./assets/fonts/Playwrite_AU_SA/static/PlaywriteAUSA-ExtraLight.ttf'),
+        'Playwrite-Light': require('./assets/fonts/Playwrite_AU_SA/static/PlaywriteAUSA-Light.ttf'),
+        'Playwrite-Regular': require('./assets/fonts/Playwrite_AU_SA/static/PlaywriteAUSA-Regular.ttf'),
+        'Playwrite-Thin': require('./assets/fonts/Playwrite_AU_SA/static/PlaywriteAUSA-Thin.ttf'),
+    });
+
     // STATES
     const [todoList, setTodoList] = useState([
-        { id: 1, title: 'Sortir le chat', isCompleted: true },
-        { id: 2, title: 'Aller au sport', isCompleted: true },
-        { id: 3, title: 'Faire les courses', isCompleted: true },
-        { id: 4, title: 'Appeler copain', isCompleted: false },
-        { id: 5, title: 'Préparer le dîner', isCompleted: false },
-        { id: 6, title: 'Lire un chapitre de livre', isCompleted: true },
-        { id: 7, title: 'Envoyer un email important', isCompleted: false },
-        { id: 8, title: 'Nettoyer la maison', isCompleted: true },
-        { id: 9, title: 'Planifier le week-end', isCompleted: false },
+        // { id: 1, title: 'Sortir le chat', isCompleted: true },
+        // { id: 2, title: 'Aller au sport', isCompleted: true },
+        // { id: 3, title: 'Faire les courses', isCompleted: true },
+        // { id: 4, title: 'Appeler copain', isCompleted: false },
+        // { id: 5, title: 'Préparer le dîner', isCompleted: false },
+        // { id: 6, title: 'Lire un chapitre de livre', isCompleted: true },
+        // { id: 7, title: 'Envoyer un email important', isCompleted: false },
+        // { id: 8, title: 'Nettoyer la maison', isCompleted: true },
+        // { id: 9, title: 'Planifier le week-end', isCompleted: false },
+        // { id: 10, title: 'Faire une promenade', isCompleted: false },
+        // {
+        //     id: 11,
+        //     title: 'Apprendre une nouvelle compétence',
+        //     isCompleted: false,
+        // },
+        // { id: 12, title: 'Faire du jardinage', isCompleted: true },
+        // { id: 13, title: 'Réviser pour un examen', isCompleted: false },
+        // {
+        //     id: 14,
+        //     title: 'Faire une réservation au restaurant',
+        //     isCompleted: true,
+        // },
     ]);
 
     const [activeTab, setActiveTab] = useState('all');
 
-    //* CREATE
-    function addTask(inputValue) {
+    const [isAddDialogVisible, setIsAddDialogVisible] = useState(false);
+
+    const [inputAddTask, setInputAddTask] = useState('');
+
+    // //* CREATE
+    // Ajout d'une tâche
+    function addTask(inputAddTask) {
+        console.log(inputAddTask);
         const newTask = {
-            id: new Date().getTime(),
-            title: inputValue,
+            id: uuid.v4(),
+            title: inputAddTask,
             isCompleted: false,
         };
-        todoList.push(newTask);
+
+        setTodoList([...todoList, newTask]);
+
+        hideAddDialog();
+    }
+    // Boite de dialog
+    function showAddDialog() {
+        setIsAddDialogVisible(true);
+    }
+    function hideAddDialog() {
+        setIsAddDialogVisible(false);
     }
 
     //* READ
@@ -107,7 +149,6 @@ export default function App() {
     }
 
     //* DELETE
-
     // Fonction pour confirmer la suppression
     const confirmDeleteTask = (task) => {
         function deleteTask(task) {
@@ -141,15 +182,42 @@ export default function App() {
                         <Header />
                     </View>
 
-                    {/* Tasks list */}
+                    {/* Liste des taches */}
                     <View style={styles.body}>
                         <ScrollView>{renderTodoList()}</ScrollView>
                     </View>
 
-                    {/* Add task */}
-                    {/* <AddButton></AddButton> */}
+                    {/* Ajout d'une tâche */}
+                    <AddButton onPress={() => showAddDialog()}></AddButton>
                 </SafeAreaView>
             </SafeAreaProvider>
+
+            {/* Modale ajout d'une tâche */}
+            <Dialog.Container
+                visible={isAddDialogVisible}
+                onBackdropPress={() => setIsAddDialogVisible(false)}
+            >
+                <Dialog.Title>Nouvelle tâche</Dialog.Title>
+
+                <Dialog.Description>
+                    Nom de la nouvelle tâche :
+                </Dialog.Description>
+
+                <Dialog.Input onChangeText={setInputAddTask} />
+
+                <Dialog.Button
+                    label="Créer"
+                    onPress={() => addTask(inputAddTask)}
+                    color={'#2E76E5'}
+                    bold="true"
+                    disabled={inputAddTask.trim().length === 0}
+                />
+                <Dialog.Button
+                    label="Annuler"
+                    onPress={() => setIsAddDialogVisible(false)}
+                    color={'#111'}
+                />
+            </Dialog.Container>
 
             {/* Footer */}
             <View style={styles.footer}>
