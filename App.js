@@ -77,6 +77,7 @@ export default function App() {
     const [isLoadUpdate, setIsLoadUpdate] = useState(false);
 
     // USE EFFECT
+
     useEffect(() => {
         loadTodoList();
         // setIsFirstRender(false);
