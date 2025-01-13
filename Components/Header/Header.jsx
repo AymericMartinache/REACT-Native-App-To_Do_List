@@ -1,5 +1,5 @@
 // REACT NATIVE
-import { Image, Text, View } from 'react-native';
+import { Image, Text } from 'react-native';
 
 // ASSETS
 import logo from '../../assets/img/logo.png';

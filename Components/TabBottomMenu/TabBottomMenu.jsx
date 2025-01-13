@@ -1,6 +1,3 @@
-// REACT
-import React, { useEffect, useState } from 'react';
-
 // REACT NATIVE
 import { Text, TouchableOpacity, View } from 'react-native';
 

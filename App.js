@@ -200,7 +200,7 @@ export default function App() {
     //* STORAGE
     // Sauvegarde
     async function saveToDoList() {
-        console.log('SAVE TO DO');
+        // console.log('SAVE TO DO');
 
         try {
             await AsyncStorage.setItem('@todoList', JSON.stringify(todoList));
